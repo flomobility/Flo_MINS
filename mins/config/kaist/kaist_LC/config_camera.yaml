@@ -1,0 +1,63 @@
+%YAML:1.0 # need to specify the file type at the top!
+
+cam:
+  enabled: true
+  max_n: 2
+  use_stereo: true
+  stereo_pair: [0, 1]
+  do_calib_ext: false
+  do_calib_int: true
+  do_calib_dt: false
+  n_pts: 1500
+  fast: 30
+  grid_x: 15
+  grid_y: 15
+  min_px_dist: 15
+  knn: 0.65
+  downsample: true
+  histogram_method: "HISTOGRAM" # NONE, HISTOGRAM, CLAHE
+  max_slam: 0
+  max_msckf: 50
+  feat_rep: "GLOBAL_FULL_INVERSE_DEPTH"
+  init_cov_dt: 1e-4
+  init_cov_ex_o: 1e-8
+  init_cov_ex_p: 1e-8
+  init_cov_in_k: 1e-2
+  init_cov_in_c: 1e-1
+  init_cov_in_r: 1e-6
+  sigma_px: 2
+  chi2_mult: 1
+
+  # feature related
+  fi_min_dist: 0.25
+  fi_max_dist: 150
+  fi_max_baseline: 2000
+  fi_max_cond_number: 10000
+
+  # ==================================================================
+  # ==================================================================
+
+cam0:
+  timeoffset: 0.012250562026137328 # Slightly reduce the time offset for better synchronization
+  T_imu_cam:
+    - [-0.007761805563794688, -0.9998617724361787, 0.014703414405289425, 0.058313580358164245]
+    - [0.99994829052482, -0.007664185230985332, 0.0066840512592031154, 0.010828818671678841]
+    - [-0.006570437647551022, 0.014754534405699541, 0.999869558024241, -0.03876433006930458]
+    - [0.0, 0.0, 0.0, 1.0]
+  distortion_coeffs: [0.05232113593699716, -0.12487610292253656, -0.0037217013110222687, -0.005694290501133073]
+  distortion_model: radtan
+  intrinsics: [806.0983330751723, 806.9371188046457, 644.0717375173197, 372.1150158131226]
+  resolution: [640, 400] 
+  topic: "/left/image_rect"
+cam1:
+  timeoffset: 0.012243445455696016  # Align the time offset with camera 0
+  T_imu_cam:
+    - [-0.0074757030811907765, -0.9998459022778627, 0.015883499665008856, -0.01694883585889153]
+    - [0.9999426404990135, -0.00735270612853528, 0.007788030845354505, 0.010720257947184378]
+    - [-0.007670044022211801, 0.015940809601581174, 0.9998435182637049, -0.03798220632736266]
+    - [0.0, 0.0, 0.0, 1.0]
+  distortion_coeffs: [0.06051458644906313, -0.1573827673651607, -0.0042069861440766415, -0.004175998024057702]
+  distortion_model: radtan
+  intrinsics: [805.9461502073949, 807.3027995524748, 642.7647267239337, 370.57625497718556]
+  resolution: [640, 400]
+  topic: "/right/image_rect"

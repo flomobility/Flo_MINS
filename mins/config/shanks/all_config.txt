@@ -1,0 +1,137 @@
+%YAML:1.0
+
+# Camera configuration
+cam:
+  enabled: true
+  max_n: 3  # Allow for more cameras to be used
+  use_stereo: true
+  stereo_pair: [0, 1]
+  do_calib_ext: true
+  do_calib_int: true
+  do_calib_dt: true
+  n_pts: 250  # Increased further for higher calibration reliability
+  fast: 10  # Reduce for finer detection speed vs accuracy balance
+  grid_x: 7  # More points for denser calibration grid
+  grid_y: 7
+  min_px_dist: 20  # Further increased to reduce feature overlap
+  knn: 0.8  # Adjusted for slightly stricter matching
+  downsample: true  # Downsampling for memory efficiency
+  histogram_method: "ADAPTIVE"  # More dynamic histogram adjustment
+  max_slam: 100  # Increased for robust SLAM performance
+  max_msckf: 90  # Better balance between feature quantity and computation
+  feat_rep: "GLOBAL_3D"
+  init_cov_dt: 5e-2
+  init_cov_ex_o: 5e-2
+  init_cov_ex_p: 5e-2  # Adjusted for precision in pose estimation
+  init_cov_in_k: 5e-1
+  init_cov_in_c: 5e-1
+  init_cov_in_r: 1e-3
+  sigma_px: 0.8  # Increased sensitivity to pixel detection
+  chi2_mult: 0.9  # Tightened for stricter outlier rejection
+
+  # Feature-related settings
+  fi_min_dist: 4.0  # Increased for robustness against noise
+  fi_max_dist: 250
+  fi_max_baseline: 5000
+  fi_max_cond_number: 300  # Lower for better numerical stability
+
+# ==================================================================
+# Camera 0 Configuration
+cam0:
+  timeoffset: 0.012  # Optimized for synchronization
+  T_imu_cam:
+    - [-0.0043, 0.99999, -0.0007, -0.011]
+    - [-0.99999, -0.0043, -0.002, 0.049]
+    - [-0.002, 0.0007, 1.0, 0.005]
+    - [0.0, 0.0, 0.0, 1.0]
+  distortion_coeffs: [0.075, -0.23, 0, -0.003]
+  distortion_model: radtan
+  intrinsics: [405.5, 406.5, 328.5, 210.0]
+  resolution: [640, 400]
+  timeshift_cam_imu: 0.0006
+  topic: "/left/image_rect"
+
+# Camera 1 Configuration
+cam1:
+  timeoffset: 0.012  # Aligning with cam0
+  T_imu_cam:
+    - [-0.0044, 0.99999, 0.0003, -0.011]
+    - [-0.99998, -0.0044, -0.0046, -0.027]
+    - [-0.0046, -0.0003, 1.0, 0.003]
+    - [0.0, 0.0, 0.0, 1.0]
+  distortion_coeffs: [0.040, -0.130, 0, -0.001]
+  distortion_model: radtan
+  intrinsics: [403.0, 405.0, 328.0, 210.0]
+  resolution: [640, 400]
+  timeshift_cam_imu: 0.0006
+  topic: "/right/image_rect"
+
+# Wheel configuration
+wheel:
+  enabled: true
+  type: "Wheel3DAng"
+  do_calib_dt: true
+  do_calib_ext: true
+  do_calib_int: true  # Enabled for comprehensive calibration
+  noise_w: 0.12
+  noise_v: 0.25
+  noise_p: 0.04
+  init_cov_dt: 1e-4
+  init_cov_ex_o: 1e-4
+  init_cov_ex_p: 4e-2
+  init_cov_in_b: 4e-1
+  init_cov_in_r: 4e-1
+  chi2_mult: 1.0  # Moderate outlier rejection
+  timeoffset: 0.0
+  intrinsics: [0.12, 0.12, 0.75]  # Calibrated with slightly higher precision
+  reuse_of_information: true
+  T_imu_wheel:
+    - [0, 0, 1, 0.3]
+    - [1, 0, 0, 0.0]
+    - [0, -1, 0, 0.3]
+    - [0.0, 0.0, 0.0, 1.0]
+  topic: "/joints/states"
+
+# Estimation configuration
+est:
+  gravity_mag: 9.81
+  clone_freq: 25  # Higher clone frequency for better data retention
+  window_size: 1.2  # Slightly increased for smoother estimates
+  intr_order: 3
+  intr_error_mlt: 2.5  # Reduced for more conservative error handling
+  intr_error_ori_thr: 0.005  # Tighter for better orientation precision
+  intr_error_pos_thr: 0.002  # Tighter for better position precision
+  intr_error_thr_mlt: 0.45  # Conservative threshold multiplier
+  dt_extrapolation: 0.008  # Optimized for faster extrapolation
+
+  use_imu_res: true
+  use_imu_cov: true  # Now using IMU covariance
+  use_pol_cov: true
+  dynamic_cloning: true
+
+# Initialization configuration
+init:
+  window_time: 1.5  # Faster initialization time
+  imu_thresh: 0.08  # Reduced for more sensitive initialization
+  imu_wheel_thresh: 0.08
+  imu_only_init: true
+  imu_gravity_aligned: true
+  use_gt: false
+  use_gt_gnss: false
+  use_gt_lidar: false
+  cov_size: 5e-3  # Smaller for tighter initial uncertainty
+
+# IMU configuration
+imu:
+  accel_noise: 0.009  # Lowered for finer accuracy
+  accel_bias: 0.002
+  gyro_noise: 0.001
+  gyro_bias: 6.5e-05
+  topic: "/imu"
+
+# System configuration
+sys:
+  verbosity: 3  # Increase for detailed logging
+  save_timing: true
+  path_timing: "MINS_DIR/../../../../outputs/tmp/0.time"
+  print_output: true  # For better debugging insight
